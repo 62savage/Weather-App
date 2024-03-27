@@ -1,5 +1,8 @@
 import { useEffect } from "react";
 import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import WeatherBox from "./components/WeatherBox";
+import WeatherButton from "./components/WeatherButton";
 
 function App() {
   const getCurrentLocation = () => {
@@ -21,7 +24,14 @@ function App() {
     getCurrentLocation();
   }, []);
 
-  return <div></div>;
+  return (
+    <>
+      <div className="container">
+        <WeatherBox />
+        <WeatherButton />
+      </div>
+    </>
+  );
 }
 
 export default App;
