@@ -6,6 +6,7 @@ import WeatherButton from "./components/WeatherButton";
 
 function App() {
   const [weather, setWeather] = useState(null);
+  const [city, setCity] = useState(null);
   const cities = ["paris", "new york", "tokyo", "seoul"];
   const getCurrentLocation = () => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -22,15 +23,26 @@ function App() {
     setWeather(data);
   };
 
+  const getWeatherByCityName = async () => {
+    let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.REACT_APP_API_KEY}&units=metric`;
+    let response = await fetch(url);
+    let data = await response.json();
+    console.log(data);
+  };
+
   useEffect(() => {
-    getCurrentLocation();
-  }, []);
+    if (city == "") {
+      getCurrentLocation();
+    } else {
+      getWeatherByCityName();
+    }
+  }, [city]);
 
   return (
     <>
       <div className="container">
         <WeatherBox weather={weather} />
-        <WeatherButton setWeather={setWeather} cities={cities} />
+        <WeatherButton setCity={setCity} cities={cities} />
       </div>
     </>
   );
