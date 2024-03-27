@@ -1,12 +1,13 @@
 import React from "react";
 import { Button } from "react-bootstrap";
 
-export default function WeatherButton({ setWeather }) {
+export default function WeatherButton({ setWeather, cities }) {
   return (
-    <div>
-      <Button variant="warning">도시1</Button>
-      <Button variant="warning">도시1</Button>
-      <Button variant="warning">도시1</Button>
-    </div>
+    <>
+      <Button variant="warning">Current Location</Button>
+      {cities.map((city) => (
+        <Button variant="warning">{city}</Button>
+      ))}
+    </>
   );
 }
