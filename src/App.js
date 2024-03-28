@@ -9,6 +9,7 @@ function App() {
   const [weather, setWeather] = useState(null);
   const [city, setCity] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const cities = ["paris", "new york", "tokyo", "seoul"];
   const getCurrentLocation = () => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -27,27 +28,37 @@ function App() {
   };
 
   const getWeatherByCurrentLocation = async (lat, lon) => {
-    let url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${process.env.REACT_APP_API_KEY}&units=metric`;
-    setLoading(true);
-    let response = await fetch(url);
-    let data = await response.json();
-    setWeather(data);
-    setLoading(false);
+    try {
+      let url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${process.env.REACT_APP_API_KEY}&units=metric`;
+      let response = await fetch(url);
+      let data = await response.json();
+      setWeather(data);
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
   };
 
   const getWeatherByCityName = async () => {
-    let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.REACT_APP_API_KEY}&units=metric`;
-    setLoading(true);
-    let response = await fetch(url);
-    let data = await response.json();
-    setWeather(data);
-    setLoading(false);
+    try {
+      let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.REACT_APP_API_KEY}&units=metric`;
+      let response = await fetch(url);
+      let data = await response.json();
+      setWeather(data);
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     if (city == "") {
+      setLoading(true);
       getCurrentLocation();
     } else {
+      setLoading(true);
       getWeatherByCityName();
     }
   }, [city]);
@@ -64,7 +75,7 @@ function App() {
             data-testid="loader"
           />
         </div>
-      ) : (
+      ) : !error ? (
         <div className="container">
           <WeatherBox weather={weather} />
           <WeatherButton
@@ -80,6 +91,8 @@ function App() {
             data-testid="loader"
           />
         </div>
+      ) : (
+        error
       )}
     </>
   );
