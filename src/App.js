@@ -18,6 +18,14 @@ function App() {
     });
   };
 
+  const handleCityChange = (city) => {
+    if (city === "current") {
+      setCity("");
+    } else {
+      setCity(city);
+    }
+  };
+
   const getWeatherByCurrentLocation = async (lat, lon) => {
     let url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${process.env.REACT_APP_API_KEY}&units=metric`;
     setLoading(true);
@@ -59,7 +67,11 @@ function App() {
       ) : (
         <div className="container">
           <WeatherBox weather={weather} />
-          <WeatherButton setCity={setCity} cities={cities} />
+          <WeatherButton
+            setCity={setCity}
+            cities={cities}
+            handleCityChange={handleCityChange}
+          />
           <ClipLoader
             color="#f88c6b"
             loading={loading}
